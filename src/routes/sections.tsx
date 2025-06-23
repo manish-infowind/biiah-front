@@ -18,7 +18,7 @@ export const UserPage = lazy(() => import('src/pages/user'));
 export const SignInPage = lazy(() => import('src/pages/sign-in'));
 export const ProductsPage = lazy(() => import('src/pages/products'));
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
-
+export const SignUpView = lazy(()=> import('src/pages/sign-up'))
 const renderFallback = () => (
   <Box
     sx={{
@@ -58,9 +58,35 @@ export const routesSection: RouteObject[] = [
   {
     path: 'sign-in',
     element: (
-      <AuthLayout>
+      <AuthLayout
+        slotProps={{
+          content: {
+            sx: {
+              backgroundColor: 'transparent'
+            },
+          },
+        }}
+      >
         <SignInPage />
       </AuthLayout>
+
+    ),
+  },
+   {
+    path: 'sign-up',
+    element: (
+      <AuthLayout
+        slotProps={{
+          content: {
+            sx: {
+              backgroundColor: 'transparent'
+            },
+          },
+        }}
+      >
+        <SignUpView />
+      </AuthLayout>
+
     ),
   },
   {

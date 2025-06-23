@@ -3,21 +3,18 @@ import { useState, useCallback } from 'react';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import InputAdornment from '@mui/material/InputAdornment';
 
 import { useRouter } from 'src/routes/hooks';
-
-import { Iconify } from 'src/components/iconify';
+//import { Iconify } from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
 export function SignInView() {
   const router = useRouter();
-
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSignIn = useCallback(() => {
@@ -28,44 +25,31 @@ export function SignInView() {
     <Box
       sx={{
         display: 'flex',
-        alignItems: 'flex-end',
+        alignItems: 'center',
         flexDirection: 'column',
       }}
     >
       <TextField
         fullWidth
         name="email"
-        label="Email address"
-        defaultValue="hello@gmail.com"
-        sx={{ mb: 3 }}
-        slotProps={{
-          inputLabel: { shrink: true },
+         placeholder="Email"
+        sx={{ mb: 3, width: '402px', }}
+        InputProps={{
+          sx: { borderRadius: 99, height: '63px' },
         }}
+        InputLabelProps={{ shrink: true }}
       />
-
-      <Link variant="body2" color="inherit" sx={{ mb: 1.5 }}>
-        Forgot password?
-      </Link>
 
       <TextField
         fullWidth
         name="password"
-        label="Password"
-        defaultValue="@demo1234"
+         placeholder="Enter password"
         type={showPassword ? 'text' : 'password'}
-        slotProps={{
-          inputLabel: { shrink: true },
-          input: {
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
-                  <Iconify icon={showPassword ? 'solar:eye-bold' : 'solar:eye-closed-bold'} />
-                </IconButton>
-              </InputAdornment>
-            ),
-          },
+        InputProps={{
+          sx: { borderRadius: 99, height: '63px' },
         }}
-        sx={{ mb: 3 }}
+        InputLabelProps={{ shrink: true }}
+        sx={{ mb: 3, width: '402px', }}
       />
 
       <Button
@@ -75,9 +59,36 @@ export function SignInView() {
         color="inherit"
         variant="contained"
         onClick={handleSignIn}
+        sx={{
+          width: '402px',
+          height: '63px',
+          borderRadius: 99,
+          mb: 2,
+          textTransform: 'none',
+        }}
       >
-        Sign in
+        Let&apos;s go!
       </Button>
+
+      <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', mt: 1 }}>
+        <Typography variant="body2" sx={{ color: 'black' }}>
+          Password Reset{' '}
+          <Link
+            href="#"
+            sx={{
+              color: '#d064dd',
+              textDecoration: 'none',
+              fontWeight: 500,
+              '&:hover': {
+                textDecoration: 'underline',
+              },
+            }}
+          >
+            here
+          </Link>
+        </Typography>
+      </Box>
+
     </Box>
   );
 
@@ -92,45 +103,9 @@ export function SignInView() {
           mb: 5,
         }}
       >
-        <Typography variant="h5">Sign in</Typography>
-        <Typography
-          variant="body2"
-          sx={{
-            color: 'text.secondary',
-          }}
-        >
-          Don’t have an account?
-          <Link variant="subtitle2" sx={{ ml: 0.5 }}>
-            Get started
-          </Link>
-        </Typography>
+        <Typography variant="h5">Login</Typography>
       </Box>
       {renderForm}
-      <Divider sx={{ my: 3, '&::before, &::after': { borderTopStyle: 'dashed' } }}>
-        <Typography
-          variant="overline"
-          sx={{ color: 'text.secondary', fontWeight: 'fontWeightMedium' }}
-        >
-          OR
-        </Typography>
-      </Divider>
-      <Box
-        sx={{
-          gap: 1,
-          display: 'flex',
-          justifyContent: 'center',
-        }}
-      >
-        <IconButton color="inherit">
-          <Iconify width={22} icon="socials:google" />
-        </IconButton>
-        <IconButton color="inherit">
-          <Iconify width={22} icon="socials:github" />
-        </IconButton>
-        <IconButton color="inherit">
-          <Iconify width={22} icon="socials:twitter" />
-        </IconButton>
-      </Box>
     </>
   );
 }
