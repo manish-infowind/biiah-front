@@ -50,8 +50,8 @@ export function HeaderSection({
       position="sticky"
       color="transparent"
       isOffset={false}
-      disableOffset={true}
-      disableElevation={true}
+      disableOffset
+      disableElevation
       className={mergeClasses([layoutClasses.header, className])}
       sx={[
         { background: 'transparent', boxShadow: 'none' },

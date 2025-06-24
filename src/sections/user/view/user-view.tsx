@@ -1,4 +1,4 @@
-import { useState, useCallback, SetStateAction } from 'react';
+import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
@@ -8,7 +8,6 @@ import Button from '@mui/material/Button';
 import TableBody from '@mui/material/TableBody';
 import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
-import TablePagination from '@mui/material/TablePagination';
 import Grid from '@mui/material/Grid';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
@@ -17,19 +16,11 @@ import IconButton from '@mui/material/IconButton';
 import { _users } from 'src/_mock';
 import { DashboardContent } from 'src/layouts/dashboard';
 
-import { Iconify } from 'src/components/iconify';
-import { Scrollbar } from 'src/components/scrollbar';
 
-import { TableNoData } from '../table-no-data';
-import { UserTableRow } from '../user-table-row';
-import { UserTableHead } from '../user-table-head';
-import { TableEmptyRows } from '../table-empty-rows';
-import { UserTableToolbar } from '../user-table-toolbar';
-import { emptyRows, applyFilter, getComparator } from '../utils';
+import { applyFilter, getComparator } from '../utils';
 
 import type { UserProps } from '../user-table-row';
 import { SummaryStatCard } from 'src/components/cards/SummaryStatCard';
-import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import EditAttendeeModal from '../EditAttendeeModal';
 import type { Attendee } from '../EditAttendeeModal';

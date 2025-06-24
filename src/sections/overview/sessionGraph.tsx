@@ -5,7 +5,7 @@ import { useTheme } from '@mui/material/styles';
 import { fNumber } from 'src/utils/format-number';
 import { Chart, useChart } from 'src/components/chart';
 
-import type { SxProps, Theme } from '@mui/material/styles';
+import type { Theme, SxProps } from '@mui/material/styles';
 
 // data: [ [worse], [same], [better] ]
 type Props = {
