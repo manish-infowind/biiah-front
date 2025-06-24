@@ -1,4 +1,5 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, SetStateAction } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -8,6 +9,10 @@ import TableBody from '@mui/material/TableBody';
 import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
+import Grid from '@mui/material/Grid';
+import TableRow from '@mui/material/TableRow';
+import TableCell from '@mui/material/TableCell';
+import IconButton from '@mui/material/IconButton';
 
 import { _users } from 'src/_mock';
 import { DashboardContent } from 'src/layouts/dashboard';
@@ -23,13 +28,106 @@ import { UserTableToolbar } from '../user-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../utils';
 
 import type { UserProps } from '../user-table-row';
+import { SummaryStatCard } from 'src/components/cards/SummaryStatCard';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import EditAttendeeModal from '../EditAttendeeModal';
+import type { Attendee } from '../EditAttendeeModal';
+import ManualAddAttendeeModal from '../ManualAddAttendeeModal';
+import AddIcon from '@mui/icons-material/Add';
+import type { ManualAddAttendee } from '../ManualAddAttendeeModal';
 
 // ----------------------------------------------------------------------
 
+// Mock data for demonstration (replace with real data source as needed)
+const activeMembers = [
+  {
+    firstName: 'Jason',
+    lastName: 'Hunt',
+    voicePart: 'Low',
+    singerNotes: 'Lorem ipsum dolor sit amet.',
+    attendedTerm: 8,
+    attendedAll: 100,
+    email: 'JH@yaya.com',
+    appStatus: 'active',
+  },
+  {
+    firstName: 'Makele',
+    lastName: 'Briant',
+    voicePart: 'High',
+    singerNotes: 'Lorem ipsum dolor sit amet.',
+    attendedTerm: 0,
+    attendedAll: 5,
+    email: 'MB@yaya.com',
+    appStatus: 'deactivated',
+  },
+  {
+    firstName: 'Sophie',
+    lastName: 'Clayton',
+    voicePart: 'High',
+    singerNotes: 'Lorem ipsum dolor sit amet.',
+    attendedTerm: 0,
+    attendedAll: 70,
+    email: 'SC@yaya.com',
+    appStatus: 'active',
+  },
+];
+
+const deactivatedMembers = [
+  {
+    firstName: 'Chris',
+    lastName: 'Fort',
+    voicePart: 'Low',
+    singerNotes: 'Lorem ipsum dolor sit amet.',
+    attendedTerm: 1,
+    attendedAll: 8,
+    email: 'CF@yaya.com',
+    appStatus: 'active',
+    leaverNotes: 'Lorem ipsum dolor sit amet.',
+  },
+  {
+    firstName: 'Ben',
+    lastName: 'Wall',
+    voicePart: 'High',
+    singerNotes: 'Lorem ipsum dolor sit amet.',
+    attendedTerm: 0,
+    attendedAll: 0,
+    email: 'BW@yaya.com',
+    appStatus: 'deactivated',
+    leaverNotes: 'Lorem ipsum dolor sit amet.',
+  },
+  {
+    firstName: 'John',
+    lastName: '',
+    voicePart: 'High',
+    singerNotes: 'Lorem ipsum dolor sit amet.',
+    attendedTerm: 0,
+    attendedAll: 0,
+    email: 'JS@yaya.com',
+    appStatus: 'active',
+    leaverNotes: 'Lorem ipsum dolor sit amet.',
+  },
+  {
+    firstName: 'Jaan',
+    lastName: '',
+    voicePart: 'Low',
+    singerNotes: 'Lorem ipsum dolor sit amet.',
+    attendedTerm: 0,
+    attendedAll: 0,
+    email: 'JS@yaya.com',
+    appStatus: 'active',
+    leaverNotes: 'Lorem ipsum dolor sit amet.',
+  },
+];
+
 export function UserView() {
+  const navigate = useNavigate();
   const table = useTable();
 
   const [filterName, setFilterName] = useState('');
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [editAttendee, setEditAttendee] = useState<Attendee | undefined>(undefined);
+  const [openManualAddModal, setOpenManualAddModal] = useState(false);
 
   const dataFiltered: UserProps[] = applyFilter({
     inputData: _users,
@@ -39,97 +137,307 @@ export function UserView() {
 
   const notFound = !dataFiltered.length && !!filterName;
 
+  // Handler for Manual Add button (modal logic to be implemented)
+  const handleManualAdd = () => {
+    setOpenManualAddModal(true);
+  };
+
+  const handleEditClick = (attendee: Attendee) => {
+    setEditAttendee(attendee);
+    setOpenEditModal(true);
+  };
+  const handleEditClose = () => {
+    setOpenEditModal(false);
+    setEditAttendee(undefined);
+  };
+  const handleEditSave = (updated: Attendee) => {
+    setOpenEditModal(false);
+    setEditAttendee(undefined);
+    // Optionally update data here
+  };
+
+  const handleManualAddClose = () => {
+    setOpenManualAddModal(false);
+  };
+
+  const handleManualAddSave = (attendee: ManualAddAttendee) => {
+    setOpenManualAddModal(false);
+    // Optionally add attendee to the list here
+  };
+
   return (
-    <DashboardContent>
-      <Box
-        sx={{
-          mb: 5,
-          display: 'flex',
-          alignItems: 'center',
-        }}
-      >
-        <Typography variant="h4" sx={{ flexGrow: 1 }}>
-          Users
-        </Typography>
+    <DashboardContent sx={{ position: 'relative' }}>
+      <Box sx={{ position: 'absolute', top: 32, right: 48, zIndex: 10, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 2 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <span style={{ fontWeight: 500, color: '#232b2b', fontSize: 18, marginRight: 8 }}>Invite Members</span>
+          <IconButton
+            sx={{
+              width: 44,
+              height: 44,
+              borderRadius: '50%',
+              background: 'linear-gradient(135deg, #e05fd6 0%, #d064dd 100%)',
+              color: '#fff',
+              boxShadow: '0px 2px 8px #d064dd33',
+              fontSize: 28,
+              '&:hover': {
+                background: 'linear-gradient(135deg, #d064dd 0%, #b94fc6 100%)',
+              },
+            }}
+          >
+            <AddIcon sx={{ fontSize: 28 }} />
+          </IconButton>
+        </Box>
         <Button
           variant="contained"
-          color="inherit"
-          startIcon={<Iconify icon="mingcute:add-line" />}
+          onClick={() => navigate('/attendance')}
+          sx={{
+            borderRadius: 99,
+            background: 'linear-gradient(90deg, #d064dd 60%, #ff5fd2 100%)',
+            color: '#fff',
+            fontWeight: 600,
+            px: 4,
+            py: 1.2,
+            textTransform: 'none',
+            boxShadow: '0px 2px 8px #d064dd33',
+            fontSize: 18,
+            minWidth: 180,
+            '&:hover': {
+              background: 'linear-gradient(90deg, #b94fc6 60%, #ff5fd2 100%)',
+            },
+          }}
         >
-          New user
+          Attendance
         </Button>
       </Box>
+      <Grid container spacing={2} sx={{ mb: 3 }}>
+      <Grid size={{ xs: 12, sm: 6, md: 3, lg: 2 }}>
+          <SummaryStatCard
+            title="Total Members"
+            total={75}
+            subtitle="56 Active"
+            valueColor="#00CFE8"
+            sx={{ boxShadow: '0px 4px 24px rgba(140, 152, 164, 0.10)', borderRadius: 3, background: '#fff' }}
+          />
+        </Grid>
+      </Grid>
 
-      <Card>
-        <UserTableToolbar
-          numSelected={table.selected.length}
-          filterName={filterName}
-          onFilterName={(event: React.ChangeEvent<HTMLInputElement>) => {
-            setFilterName(event.target.value);
-            table.onResetPage();
-          }}
-        />
-
-        <Scrollbar>
-          <TableContainer sx={{ overflow: 'unset' }}>
-            <Table sx={{ minWidth: 800 }}>
-              <UserTableHead
-                order={table.order}
-                orderBy={table.orderBy}
-                rowCount={_users.length}
-                numSelected={table.selected.length}
-                onSort={table.onSort}
-                onSelectAllRows={(checked) =>
-                  table.onSelectAllRows(
-                    checked,
-                    _users.map((user) => user.id)
-                  )
-                }
-                headLabel={[
-                  { id: 'name', label: 'Name' },
-                  { id: 'company', label: 'Company' },
-                  { id: 'role', label: 'Role' },
-                  { id: 'isVerified', label: 'Verified', align: 'center' },
-                  { id: 'status', label: 'Status' },
-                  { id: '' },
-                ]}
-              />
+      {/* Active Members Card */}
+      <Card sx={{mt: 8, mb: 4, borderRadius: 4, boxShadow: '0px 4px 24px rgba(140, 152, 164, 0.10)', background: '#FAFAF9', position: 'relative' }}>
+        <Box sx={{ position: 'absolute', top: 18, right: 32, zIndex: 3, transform: 'translateY(-50%)' }}>
+          <Button
+            variant="contained"
+            onClick={handleManualAdd}
+            sx={{
+              borderRadius: 99,
+              background: '#fff',
+              color: '#232b2b',
+              fontWeight: 500,
+              fontSize: 16,
+              px: 3,
+              py: 0.5,
+              boxShadow: '0px 2px 8px #d064dd22',
+              textTransform: 'none',
+              border: 'none',
+              minWidth: 120,
+              '&:hover': {
+                background: '#f3e6fa',
+                color: '#d064dd',
+              },
+            }}
+          >
+            Manual Add
+          </Button>
+        </Box>
+        <Box sx={{ p: 2, pb: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Typography variant="h6" sx={{ fontWeight: 700 }}>Active Members</Typography>
+        </Box>
+        <Box sx={{ overflowX: 'auto', width: '100%' }}>
+          <TableContainer sx={{ minWidth: 1200 }}>
+            <Table sx={{ minWidth: 1200 }}>
               <TableBody>
-                {dataFiltered
-                  .slice(
-                    table.page * table.rowsPerPage,
-                    table.page * table.rowsPerPage + table.rowsPerPage
-                  )
-                  .map((row) => (
-                    <UserTableRow
-                      key={row.id}
-                      row={row}
-                      selected={table.selected.includes(row.id)}
-                      onSelectRow={() => table.onSelectRow(row.id)}
-                    />
-                  ))}
-
-                <TableEmptyRows
-                  height={68}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, _users.length)}
-                />
-
-                {notFound && <TableNoData searchQuery={filterName} />}
+                <TableRow>
+                  <TableCell sx={{ fontWeight: 700, background: '#F8EFFF', borderTopLeftRadius: 24, borderBottomLeftRadius: 24, border: 0, color: 'text.primary', py: 2, px: 2, minWidth: 120 }}>
+                    First Name
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 700, background: '#F8EFFF', border: 0, color: 'text.primary', borderLeft: '2px dotted #E1BEE7', minWidth: 120 }}>Last Name</TableCell>
+                  <TableCell sx={{ fontWeight: 700, background: '#F8EFFF', border: 0, color: 'text.primary', borderLeft: '2px dotted #E1BEE7', minWidth: 120 }}>Voice Part</TableCell>
+                  <TableCell sx={{ fontWeight: 700, background: '#F8EFFF', border: 0, color: 'text.primary', borderLeft: '2px dotted #E1BEE7', minWidth: 200 }}>Singer Notes <Typography variant="caption" color="text.secondary">(private)</Typography></TableCell>
+                  <TableCell sx={{ fontWeight: 700, background: '#F8EFFF', border: 0, color: 'text.primary', borderLeft: '2px dotted #E1BEE7', minWidth: 120 }}>Attended <Typography variant="caption" color="text.secondary">(this term)</Typography></TableCell>
+                  <TableCell sx={{ fontWeight: 700, background: '#F8EFFF', border: 0, color: 'text.primary', borderLeft: '2px dotted #E1BEE7', minWidth: 120 }}>Attended <Typography variant="caption" color="text.secondary">(all time)</Typography></TableCell>
+                  <TableCell sx={{ fontWeight: 700, background: '#F8EFFF', border: 0, color: 'text.primary', borderLeft: '2px dotted #E1BEE7', minWidth: 180 }}>Email</TableCell>
+                  <TableCell sx={{ fontWeight: 700, background: '#F8EFFF', border: 0, color: 'text.primary', borderLeft: '2px dotted #E1BEE7', borderTopRightRadius: 24, borderBottomRightRadius: 24, minWidth: 200 }}>App Status</TableCell>
+                </TableRow>
+                {activeMembers.map((member, idx) => (
+                  <TableRow key={idx}>
+                    <TableCell sx={{ py: 2, px: 2, border: 0, borderLeft: 0, display: 'flex', alignItems: 'center', gap: 1, minWidth: 120 }}>
+                      <IconButton
+                        size="small"
+                        onClick={() => handleEditClick(member)}
+                        sx={{ color: '#757575', p: 0.5, mr: 1, '&:hover': { color: '#d064dd', background: 'transparent' } }}
+                      >
+                        <EditOutlinedIcon fontSize="small" />
+                      </IconButton>
+                      {member.firstName}
+                    </TableCell>
+                    <TableCell sx={{ border: 0, borderLeft: '2px dotted #E1BEE7', minWidth: 120 }}>{member.lastName}</TableCell>
+                    <TableCell sx={{ border: 0, borderLeft: '2px dotted #E1BEE7', minWidth: 120 }}>{member.voicePart}</TableCell>
+                    <TableCell sx={{ border: 0, borderLeft: '2px dotted #E1BEE7', minWidth: 200 }}>{member.singerNotes}</TableCell>
+                    <TableCell sx={{ border: 0, borderLeft: '2px dotted #E1BEE7', minWidth: 120 }}>{member.attendedTerm}</TableCell>
+                    <TableCell sx={{ border: 0, borderLeft: '2px dotted #E1BEE7', minWidth: 120 }}>{member.attendedAll}</TableCell>
+                    <TableCell sx={{ border: 0, borderLeft: '2px dotted #E1BEE7', minWidth: 180 }}>{member.email}</TableCell>
+                    <TableCell sx={{ border: 0, borderLeft: '2px dotted #E1BEE7', minWidth: 200, display: 'flex', gap: 1 }}>
+                      <Button
+                        variant={member.appStatus === 'active' ? 'contained' : 'outlined'}
+                        size="small"
+                        sx={{
+                          borderRadius: 99,
+                          textTransform: 'none',
+                          fontWeight: 500,
+                          background: member.appStatus === 'active' ? '#E1BEE7' : '#fff',
+                          color: member.appStatus === 'active' ? '#d064dd' : '#888',
+                          boxShadow: 'none',
+                          minWidth: 80,
+                          border: member.appStatus === 'active' ? 'none' : '1px solid #E1BEE7',
+                          '&:hover': {
+                            background: member.appStatus === 'active' ? '#D1B3E0' : '#f3e6fa',
+                            border: member.appStatus === 'active' ? 'none' : '1px solid #E1BEE7',
+                          },
+                        }}
+                      >
+                        Active
+                      </Button>
+                      <Button
+                        variant={member.appStatus === 'deactivated' ? 'contained' : 'outlined'}
+                        size="small"
+                        sx={{
+                          borderRadius: 99,
+                          textTransform: 'none',
+                          fontWeight: 500,
+                          background: member.appStatus === 'deactivated' ? '#222' : '#fff',
+                          color: member.appStatus === 'deactivated' ? '#fff' : '#888',
+                          boxShadow: 'none',
+                          minWidth: 80,
+                          border: member.appStatus === 'deactivated' ? 'none' : '1px solid #E1BEE7',
+                          '&:hover': {
+                            background: member.appStatus === 'deactivated' ? '#444' : '#f3e6fa',
+                            border: member.appStatus === 'deactivated' ? 'none' : '1px solid #E1BEE7',
+                          },
+                        }}
+                      >
+                        Deactivate
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
             </Table>
           </TableContainer>
-        </Scrollbar>
-
-        <TablePagination
-          component="div"
-          page={table.page}
-          count={_users.length}
-          rowsPerPage={table.rowsPerPage}
-          onPageChange={table.onChangePage}
-          rowsPerPageOptions={[5, 10, 25]}
-          onRowsPerPageChange={table.onChangeRowsPerPage}
-        />
+        </Box>
       </Card>
+
+      {/* De-activated Members Card */}
+      <Card sx={{ borderRadius: 4, boxShadow: '0px 4px 24px rgba(140, 152, 164, 0.10)', background: '#FAFAF9' }}>
+        <Box sx={{ p: 2, pb: 0 }}>
+          <Typography variant="h6" sx={{ fontWeight: 700 }}>De-activated Members</Typography>
+        </Box>
+        <Box sx={{ overflowX: 'auto', width: '100%' }}>
+          <TableContainer sx={{ minWidth: 1400 }}>
+            <Table sx={{ minWidth: 1400 }}>
+              <TableBody>
+                <TableRow>
+                  <TableCell sx={{ fontWeight: 700, background: '#BDBDBD', borderTopLeftRadius: 24, borderBottomLeftRadius: 24, border: 0, color: 'text.primary', py: 2, px: 2, minWidth: 120 }}>
+                    First Name
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 700, background: '#BDBDBD', border: 0, color: 'text.primary', borderLeft: '2px dotted #E1BEE7', minWidth: 120 }}>Last Name</TableCell>
+                  <TableCell sx={{ fontWeight: 700, background: '#BDBDBD', border: 0, color: 'text.primary', borderLeft: '2px dotted #E1BEE7', minWidth: 120 }}>Voice Part</TableCell>
+                  <TableCell sx={{ fontWeight: 700, background: '#BDBDBD', border: 0, color: 'text.primary', borderLeft: '2px dotted #E1BEE7', minWidth: 200 }}>Singer Notes <Typography variant="caption" color="text.secondary">(private)</Typography></TableCell>
+                  <TableCell sx={{ fontWeight: 700, background: '#BDBDBD', border: 0, color: 'text.primary', borderLeft: '2px dotted #E1BEE7', minWidth: 120 }}>Attended <Typography variant="caption" color="text.secondary">(this term)</Typography></TableCell>
+                  <TableCell sx={{ fontWeight: 700, background: '#BDBDBD', border: 0, color: 'text.primary', borderLeft: '2px dotted #E1BEE7', minWidth: 120 }}>Attended <Typography variant="caption" color="text.secondary">(all time)</Typography></TableCell>
+                  <TableCell sx={{ fontWeight: 700, background: '#BDBDBD', border: 0, color: 'text.primary', borderLeft: '2px dotted #E1BEE7', minWidth: 180 }}>Email</TableCell>
+                  <TableCell sx={{ fontWeight: 700, background: '#BDBDBD', border: 0, color: 'text.primary', borderLeft: '2px dotted #E1BEE7', minWidth: 200 }}>App Status</TableCell>
+                  <TableCell sx={{ fontWeight: 700, background: '#BDBDBD', border: 0, color: 'text.primary', borderLeft: '2px dotted #E1BEE7', borderTopRightRadius: 24, borderBottomRightRadius: 24, minWidth: 200 }}>Leaver Notes</TableCell>
+                </TableRow>
+                {deactivatedMembers.map((member, idx) => (
+                  <TableRow key={idx}>
+                    <TableCell sx={{ py: 2, px: 2, border: 0, borderLeft: 0, display: 'flex', alignItems: 'center', gap: 1, minWidth: 120 }}>
+                      <IconButton
+                        size="small"
+                        onClick={() => handleEditClick(member)}
+                        sx={{ color: '#757575', p: 0.5, mr: 1, '&:hover': { color: '#d064dd', background: 'transparent' } }}
+                      >
+                        <EditOutlinedIcon fontSize="small" />
+                      </IconButton>
+                      {member.firstName}
+                    </TableCell>
+                    <TableCell sx={{ border: 0, borderLeft: '2px dotted #E1BEE7', minWidth: 120 }}>{member.lastName}</TableCell>
+                    <TableCell sx={{ border: 0, borderLeft: '2px dotted #E1BEE7', minWidth: 120 }}>{member.voicePart}</TableCell>
+                    <TableCell sx={{ border: 0, borderLeft: '2px dotted #E1BEE7', minWidth: 200 }}>{member.singerNotes}</TableCell>
+                    <TableCell sx={{ border: 0, borderLeft: '2px dotted #E1BEE7', minWidth: 120 }}>{member.attendedTerm}</TableCell>
+                    <TableCell sx={{ border: 0, borderLeft: '2px dotted #E1BEE7', minWidth: 120 }}>{member.attendedAll}</TableCell>
+                    <TableCell sx={{ border: 0, borderLeft: '2px dotted #E1BEE7', minWidth: 180 }}>{member.email}</TableCell>
+                    <TableCell sx={{ border: 0, borderLeft: '2px dotted #E1BEE7', minWidth: 200, display: 'flex', gap: 1 }}>
+                      <Button
+                        variant={member.appStatus === 'active' ? 'contained' : 'outlined'}
+                        size="small"
+                        sx={{
+                          borderRadius: 99,
+                          textTransform: 'none',
+                          fontWeight: 500,
+                          background: member.appStatus === 'active' ? '#E1BEE7' : '#fff',
+                          color: member.appStatus === 'active' ? '#d064dd' : '#888',
+                          boxShadow: 'none',
+                          minWidth: 80,
+                          border: member.appStatus === 'active' ? 'none' : '1px solid #E1BEE7',
+                          '&:hover': {
+                            background: member.appStatus === 'active' ? '#D1B3E0' : '#f3e6fa',
+                            border: member.appStatus === 'active' ? 'none' : '1px solid #E1BEE7',
+                          },
+                        }}
+                      >
+                        Active
+                      </Button>
+                      <Button
+                        variant={member.appStatus === 'deactivated' ? 'contained' : 'outlined'}
+                        size="small"
+                        sx={{
+                          borderRadius: 99,
+                          textTransform: 'none',
+                          fontWeight: 500,
+                          background: member.appStatus === 'deactivated' ? '#222' : '#fff',
+                          color: member.appStatus === 'deactivated' ? '#fff' : '#888',
+                          boxShadow: 'none',
+                          minWidth: 80,
+                          border: member.appStatus === 'deactivated' ? 'none' : '1px solid #E1BEE7',
+                          '&:hover': {
+                            background: member.appStatus === 'deactivated' ? '#444' : '#f3e6fa',
+                            border: member.appStatus === 'deactivated' ? 'none' : '1px solid #E1BEE7',
+                          },
+                        }}
+                      >
+                        Deactivate
+                      </Button>
+                    </TableCell>
+                    <TableCell sx={{ border: 0, borderLeft: '2px dotted #E1BEE7', minWidth: 200 }}>{member.leaverNotes}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+      </Card>
+
+      <EditAttendeeModal
+        open={openEditModal}
+        onClose={handleEditClose}
+        attendee={editAttendee}
+        onSave={handleEditSave}
+      />
+
+      <ManualAddAttendeeModal
+        open={openManualAddModal}
+        onClose={handleManualAddClose}
+        onAdd={handleManualAddSave}
+      />
     </DashboardContent>
   );
 }

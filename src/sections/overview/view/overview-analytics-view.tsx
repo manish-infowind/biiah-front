@@ -26,18 +26,7 @@ import { NextEventCard } from 'src/components/cards/NextEventCard';
 export function OverviewAnalyticsView() {
   return (
     <DashboardContent maxWidth="xl" sx={{ background: '#FAF9F6', minHeight: '100vh', position: 'relative', px: { xs: 1, sm: 3, md: 5 } }}>
-      {/* Quilter Logo */}
-      <Box sx={{ position: 'absolute', top: 32, right: 32, zIndex: 10 }}>
-        <Typography variant="h2" sx={{ color: '#1B7B4C', fontWeight: 700, fontFamily: 'serif', letterSpacing: 1 }}>
-          Quilter
-        </Typography>
-      </Box>
-
-      {/* Dashboard Title */}
-      <Typography variant="h4" sx={{ mb: 2, fontWeight: 700, color: 'text.primary' }}>
-        Dashboard
-      </Typography>
-
+ 
       {/* Group Stats Section */}
       <Typography variant="subtitle2" sx={{ color: 'text.secondary', fontWeight: 700, mb: 1, ml: 0.5 }}>
         Group Stats
