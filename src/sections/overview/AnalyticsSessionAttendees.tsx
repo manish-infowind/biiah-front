@@ -1,4 +1,3 @@
-
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import { useTheme } from '@mui/material/styles';
@@ -6,13 +5,16 @@ import { useTheme } from '@mui/material/styles';
 import { fNumber } from 'src/utils/format-number';
 import { Chart, useChart } from 'src/components/chart';
 
+import type { SxProps, Theme } from '@mui/material/styles';
+
 type Props = {
   title?: string;
   data: number[];
   categories: string[];
+  sx?: SxProps<Theme>;
 };
 
-export function AnalyticsSessionAttendees({ title = 'Session Attendees', data, categories }: Props) {
+export function AnalyticsSessionAttendees({ title = 'Session Attendees', data, categories, sx }: Props) {
   const theme = useTheme();
 
   const chartOptions = useChart({
@@ -40,7 +42,7 @@ export function AnalyticsSessionAttendees({ title = 'Session Attendees', data, c
   });
 
   return (
-    <Card>
+    <Card sx={sx}>
       <CardHeader title={title} />
       <Chart type="bar" series={[{ name: 'Attendees', data }]} options={chartOptions} sx={{ p: 2 }} />
     </Card>
