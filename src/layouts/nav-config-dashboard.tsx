@@ -16,32 +16,27 @@ export const navData = [
   {
     title: 'Dashboard',
     path: '/',
-    icon: icon('ic-analytics'),
+    icon: icon('ic-dashboard'),
   },
   {
     title: 'Members',
-    path: '/user',
-    icon: icon('ic-user'),
+    path: '/members',
+    icon: icon('ic-members'),
   },
   {
     title: 'Calendar',
-    path: '/products',
-    icon: icon('ic-cart'),
-    info: (
-      <Label color="error" variant="inverted">
-        +3
-      </Label>
-    ),
+    path: '/calendar',
+    icon: icon('ic-calendar')
   },
   {
     title: 'Memories',
-    path: '/blog',
-    icon: icon('ic-blog'),
+    path: '/memories',
+    icon: icon('ic-memories'),
   },
   {
     title: 'Group Details',
-    path: '/sign-in',
-    icon: icon('ic-lock'),
+    path: '/group-details',
+    icon: icon('ic-group-details'),
   },
   {
     title: 'Not found',

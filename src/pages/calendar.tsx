@@ -1,17 +1,15 @@
-import { _posts } from 'src/_mock';
 import { CONFIG } from 'src/config-global';
-import { MemoriesView } from 'src/sections/blog/view/blog-view';
 
-;
+import CalendarOverview from 'src/sections/product/view/products-view';
 
 // ----------------------------------------------------------------------
 
 export default function Page() {
   return (
     <>
-      <title>{`Memories - ${CONFIG.appName}`}</title>
+      <title>{`Calendar - ${CONFIG.appName}`}</title>
 
-      <MemoriesView />
+      <CalendarOverview />
     </>
   );
 }

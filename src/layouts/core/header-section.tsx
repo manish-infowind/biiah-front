@@ -8,6 +8,9 @@ import { varAlpha, mergeClasses } from 'minimal-shared/utils';
 import AppBar from '@mui/material/AppBar';
 import { styled } from '@mui/material/styles';
 import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import { Logo } from 'src/components/logo/logo';
+import Box from '@mui/material/Box';
 
 import { layoutClasses } from './classes';
 
@@ -28,6 +31,9 @@ export type HeaderSectionProps = AppBarProps & {
     container?: ContainerProps;
     centerArea?: React.ComponentProps<'div'> & { sx?: SxProps<Theme> };
   };
+  logo?: React.ReactNode;
+  pageName?: string;
+  backButton?: React.ReactNode;
 };
 
 export function HeaderSection({
@@ -38,39 +44,45 @@ export function HeaderSection({
   disableOffset,
   disableElevation,
   layoutQuery = 'md',
+  logo,
+  pageName,
+  backButton,
   ...other
 }: HeaderSectionProps) {
   const { offsetTop: isOffset } = useScrollOffsetTop();
+  const displayPageName = pageName || slots?.centerArea || 'Dashboard';
+  const displayLogo = logo !== undefined ? logo : <Logo isSingle sx={{ width: 40, height: 40 }} />;
 
   return (
     <HeaderRoot
       position="sticky"
       color="transparent"
-      isOffset={isOffset}
-      disableOffset={disableOffset}
-      disableElevation={disableElevation}
+      isOffset={false}
+      disableOffset
+      disableElevation
       className={mergeClasses([layoutClasses.header, className])}
       sx={[
-        (theme) => ({
-          ...(isOffset && {
-            '--color': `var(--offset-color, ${theme.vars.palette.text.primary})`,
-          }),
-        }),
+        { background: 'transparent', boxShadow: 'none' },
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
       {...other}
     >
-      {slots?.topArea}
-
-      <HeaderContainer layoutQuery={layoutQuery} {...slotProps?.container}>
-        {slots?.leftArea}
-
-        <HeaderCenterArea {...slotProps?.centerArea}>{slots?.centerArea}</HeaderCenterArea>
-
-        {slots?.rightArea}
+      <HeaderContainer layoutQuery={layoutQuery} {...slotProps?.container} sx={{ maxWidth: '1200px', mx: 'auto', width: '100%', display: 'flex', alignItems: 'center', px: { xs: 2, md: 5 } }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', flex: '0 0 auto', minHeight: 64, py: 1 }}>
+          {backButton ? (
+            <Box sx={{ mb: 0.2, display: 'flex', alignItems: 'center', minHeight: 28 }}>
+              {backButton}
+            </Box>
+          ) : (
+            <Box sx={{ mb: 0.2, minHeight: 28 }} />
+          )}
+          <Typography variant="h4" sx={{ fontWeight: 700, color: 'text.primary', fontSize: { xs: 24, md: 32 } }}>
+            {displayPageName}
+          </Typography>
+        </Box>
+        <Box sx={{ flex: 1 }} />
+        {displayLogo}
       </HeaderContainer>
-
-      {slots?.bottomArea}
     </HeaderRoot>
   );
 }

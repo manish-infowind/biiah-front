@@ -5,103 +5,63 @@ import { useTheme } from '@mui/material/styles';
 import { fNumber } from 'src/utils/format-number';
 import { Chart, useChart } from 'src/components/chart';
 
+import type { Theme, SxProps } from '@mui/material/styles';
+
 type Props = {
   title?: string;
   data: number[];
   categories: string[];
-  height?: number; // chart height in px
-  color?: string; // line and dot color
-  lineWidth?: number; // line width
-  dotSize?: number; // dot size
+  sx?: SxProps<Theme>;
 };
 
-export function AnalyticsAttendeesPerWeek({
-  title = 'Attendees per week',
-  data,
-  categories,
-  height = 320,
-  color,
-  lineWidth = 3,
-  dotSize = 6,
-}: Props) {
+export function AnalyticsAttendeesPerWeek({ title = 'Attendees per week', data, categories, sx }: Props) {
   const theme = useTheme();
-  const chartColor = color || theme.palette.secondary.main;
 
-  // Defensive checks
-  const isValid =
-    Array.isArray(data) &&
-    Array.isArray(categories) &&
-    data.length > 0 &&
-    categories.length > 0 &&
-    data.length === categories.length;
-
-  // Always call useChart, but provide fallback options if invalid
-  const chartOptions = useChart(
-    isValid
-      ? {
-          chart: { id: 'attendees-line', toolbar: { show: false } },
-          stroke: { curve: 'smooth', width: lineWidth, colors: [chartColor] },
-          markers: {
-            size: dotSize,
-            colors: ['#fff'],
-            strokeColors: chartColor,
-            strokeWidth: 2,
-          },
-          xaxis: { categories },
-          yaxis: { min: 0, max: Math.max(...data) + 20 },
-          grid: { strokeDashArray: 4 },
-          tooltip: {
-            y: {
-              formatter: (value: number) => fNumber(value),
-              title: { formatter: () => 'Attendees' },
-            },
-          },
-        }
-      : {
-          chart: { id: 'attendees-line', toolbar: { show: false } },
-          stroke: { curve: 'smooth', width: lineWidth, colors: [chartColor] },
-          markers: {
-            size: dotSize,
-            colors: ['#fff'],
-            strokeColors: chartColor,
-            strokeWidth: 2,
-          },
-          xaxis: { categories: [] },
-          yaxis: { min: 0, max: 10 },
-          grid: { strokeDashArray: 4 },
-          tooltip: {
-            y: {
-              formatter: (value: number) => fNumber(value),
-              title: { formatter: () => 'Attendees' },
-            },
-          },
-        }
-  );
-
-  if (!isValid) {
-    return (
-      <Card>
-        <CardHeader title={title} />
-        <div style={{ padding: 16, color: theme.palette.text.secondary }}>
-          No data available for chart.
-        </div>
-      </Card>
-    );
-  }
+  const chartOptions = useChart({
+    colors: ['#D064DD'],
+    chart: {
+      background: 'rgba(208, 100, 221, 0.07)', // light pink background
+      toolbar: { show: false },
+    },
+    stroke: { width: 2.5, curve: 'straight', colors: ['#D064DD'] },
+    markers: {
+      size: 7,
+      colors: ['#fff'],
+      strokeColors: '#D064DD',
+      strokeWidth: 3,
+      hover: { size: 9 },
+    },
+    xaxis: {
+      categories,
+      labels: {
+        style: { fontSize: '12px' },
+      },
+      axisBorder: { show: true },
+      axisTicks: { show: true },
+    },
+    yaxis: {
+      min: 0,
+      max: Math.max(...data, 50),
+      tickAmount: 5,
+      labels: { style: { fontSize: '12px' } },
+    },
+    grid: {
+      borderColor: theme.vars ? theme.vars.palette.divider : theme.palette.divider,
+      strokeDashArray: 3,
+      padding: { left: 0, right: 0, top: 0, bottom: 0 },
+    },
+    tooltip: {
+      y: {
+        formatter: (value: number) => fNumber(value),
+        title: { formatter: () => 'Attendees' },
+      },
+    },
+  });
 
   return (
-    <Card>
+    <Card sx={sx}>
       <CardHeader title={title} />
-      <div style={{ minHeight: height }}>
-        <Chart
-          type="line"
-          series={[{ name: 'Attendees', data }]}
-          options={chartOptions}
-          sx={{ p: 2 }}
-          height={height}
-        />
-      </div>
+      <Chart type="line" series={[{ name: 'Attendees', data }]} options={chartOptions} sx={{ p: 2 }} />
     </Card>
   );
 }
-
