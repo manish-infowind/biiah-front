@@ -174,6 +174,7 @@ export function UserView() {
                 background: 'linear-gradient(135deg, #d064dd 0%, #b94fc6 100%)',
               },
             }}
+            onClick={() => navigate('/invite-members')}
           >
             <AddIcon sx={{ fontSize: 28 }} />
           </IconButton>

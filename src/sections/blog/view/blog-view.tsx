@@ -1,96 +1,139 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import Pagination from '@mui/material/Pagination';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Icon from '@mui/material/Icon';
+import Stack from '@mui/material/Stack';
+import { alpha } from '@mui/material/styles';
 
-import { DashboardContent } from 'src/layouts/dashboard';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
-import { Iconify } from 'src/components/iconify';
+// Dummy images for demonstration
+const demoImages = [
+  [
+    'https://images.unsplash.com/photo-1506744038136-46273834b3fb',
+    'https://images.unsplash.com/photo-1465101046530-73398c7f28ca',
+  ],
+  [
+    'https://images.unsplash.com/photo-1519125323398-675f0ddb6308',
+    'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e',
+  ],
+  [
+    'https://images.unsplash.com/photo-1465101178521-c1a9136a3b99',
+    'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91',
+  ],
+  [
+    'https://images.unsplash.com/photo-1517841905240-472988babdf9',
+    'https://images.unsplash.com/photo-1465101046530-73398c7f28ca',
+  ],
+];
 
-import { PostItem } from '../post-item';
-import { PostSort } from '../post-sort';
-import { PostSearch } from '../post-search';
+export function MemoriesView() {
+  // For image carousel navigation (2 pairs per card)
+  const [activeIndexes, setActiveIndexes] = useState([0, 0, 0, 0]);
 
-import type { IPostItem } from '../post-item';
+  // Helper to get image pairs
+  const getImagePairs = (images: string[]): string[][] => {
+    const pairs = [];
+    for (let i = 0; i < images.length; i += 2) {
+      pairs.push(images.slice(i, i + 2));
+    }
+    return pairs;
+  };
 
-// ----------------------------------------------------------------------
-
-type Props = {
-  posts: IPostItem[];
-};
-
-export function BlogView({ posts }: Props) {
-  const [sortBy, setSortBy] = useState('latest');
-
-  const handleSort = useCallback((newSort: string) => {
-    setSortBy(newSort);
-  }, []);
+  // Card data: all cards should show the orange title
+  const cardData = [
+    { showTitle: true, images: demoImages[0] },
+    { showTitle: true, images: demoImages[1] },
+    { showTitle: true, images: demoImages[2] },
+    { showTitle: true, images: demoImages[3] },
+  ];
 
   return (
-    <DashboardContent>
-      <Box
-        sx={{
-          mb: 5,
-          display: 'flex',
-          alignItems: 'center',
-        }}
-      >
-        <Typography variant="h4" sx={{ flexGrow: 1 }}>
-          Blog
-        </Typography>
-        <Button
-          variant="contained"
-          color="inherit"
-          startIcon={<Iconify icon="mingcute:add-line" />}
-        >
-          New post
-        </Button>
-      </Box>
-
-      <Box
-        sx={{
-          mb: 5,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}
-      >
-        <PostSearch posts={posts} />
-        <PostSort
-          sortBy={sortBy}
-          onSort={handleSort}
-          options={[
-            { value: 'latest', label: 'Latest' },
-            { value: 'popular', label: 'Popular' },
-            { value: 'oldest', label: 'Oldest' },
-          ]}
-        />
-      </Box>
-
-      <Grid container spacing={3}>
-        {posts.map((post, index) => {
-          const latestPostLarge = index === 0;
-          const latestPost = index === 1 || index === 2;
-
+    <Box sx={{ px: { xs: 2, md: 6 }, py: 4, background: '#FAF7F2', minHeight: '100vh' }}>
+      <Typography variant="h4" sx={{ mb: 4, fontWeight: 500 }}>
+        Memories
+      </Typography>
+      <Grid container spacing={4}>
+        {cardData.map((card, cardIdx: number) => {
+          const imagePairs = getImagePairs(card.images);
+          const activePair = imagePairs[activeIndexes[cardIdx]] || [];
           return (
-            <Grid
-              key={post.id}
-              size={{
-                xs: 12,
-                sm: latestPostLarge ? 12 : 6,
-                md: latestPostLarge ? 6 : 3,
-              }}
-            >
-              <PostItem post={post} latestPost={latestPost} latestPostLarge={latestPostLarge} />
+            <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6 }} key={cardIdx}>
+              <Card
+                sx={{
+                  borderRadius: 4,
+                  boxShadow: 3,
+                  p: 2,
+                  background: '#fff',
+                  minHeight: 340,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <CardContent sx={{ pb: 1 }}>
+                  {card.showTitle && (
+                    <Typography variant="subtitle1" sx={{ color: '#FF9800', fontWeight: 600, mb: 1 }}>
+                      Singforce Weekly
+                    </Typography>
+                  )}
+                  <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 0.5 }}>
+                    <CalendarMonthIcon sx={{ fontSize: 18, color: 'text.secondary' }} />
+                    <Typography variant="body2" color="text.secondary">
+                      Sat 15 March 2025
+                    </Typography>
+                  </Stack>
+                  <Stack direction="row" alignItems="center" spacing={1}>
+                    <AccessTimeIcon sx={{ fontSize: 18, color: 'text.secondary' }} />
+                    <Typography variant="body2" color="text.secondary">
+                      12:00-13:30
+                    </Typography>
+                  </Stack>
+                </CardContent>
+                <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', alignItems: 'center', mb: 2 }}>
+                  {activePair.map((img: string, imgIdx: number) => (
+                    <CardMedia
+                      key={imgIdx}
+                      component="img"
+                      image={img}
+                      alt="memory"
+                      sx={{
+                        width: 110,
+                        height: 110,
+                        borderRadius: 2,
+                        objectFit: 'cover',
+                        boxShadow: 1,
+                      }}
+                    />
+                  ))}
+                </Box>
+                <Stack direction="row" justifyContent="center" alignItems="center" spacing={1}>
+                  {imagePairs.map((_: string[], dotIdx: number) => (
+                    <Box
+                      key={dotIdx}
+                      onClick={() => setActiveIndexes((prev) => prev.map((v, i) => i === cardIdx ? dotIdx : v))}
+                      sx={{
+                        width: 8,
+                        height: 8,
+                        borderRadius: '50%',
+                        background: dotIdx === activeIndexes[cardIdx] ? '#FF9800' : alpha('#FF9800', 0.3),
+                        cursor: 'pointer',
+                        transition: 'background 0.2s',
+                      }}
+                    />
+                  ))}
+                </Stack>
+              </Card>
             </Grid>
           );
         })}
       </Grid>
-
-      <Pagination count={10} color="primary" sx={{ mt: 8, mx: 'auto' }} />
-    </DashboardContent>
+    </Box>
   );
 }

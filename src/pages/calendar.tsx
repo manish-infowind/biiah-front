@@ -1,15 +1,15 @@
 import { CONFIG } from 'src/config-global';
 
-import { ProductsView } from 'src/sections/product/view';
+import CalendarOverview from 'src/sections/product/view/products-view';
 
 // ----------------------------------------------------------------------
 
 export default function Page() {
   return (
     <>
-      <title>{`Products - ${CONFIG.appName}`}</title>
+      <title>{`Calendar - ${CONFIG.appName}`}</title>
 
-      <ProductsView />
+      <CalendarOverview />
     </>
   );
 }
