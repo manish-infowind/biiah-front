@@ -12,6 +12,7 @@ import {
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { DashboardContent } from 'src/layouts/dashboard';
+import { BackButton } from 'src/components/back-button';
 
 const PRIMARY_COLOR = '#00B6BC';
 const TEXT_COLOR = '#071A24';
@@ -46,22 +47,6 @@ export default function EventDetailsPage() {
     <DashboardContent maxWidth="xl" sx={{ background: '#FAF9F6', minHeight: '100vh', px: { xs: 1, sm: 3, md: 5 } }}>
       {/* Top Link and Title */}
       <Box sx={{ mt: 2, mb: 2 }}>
-        <Link
-          href="/calendar"
-          underline="hover"
-          sx={{
-            color: '#d064dd',
-            fontWeight: 500,
-            fontSize: 16,
-            mb: 1,
-            display: 'inline-block',
-          }}
-        >
-          {'< Back to Calendar Page'}
-        </Link>
-        <Typography variant="h4" sx={{ fontWeight: 700, color: TEXT_COLOR, mt: 1 }}>
-          Calendar
-        </Typography>
         <Typography variant="h6" sx={{ color: '#6c6c6c', fontWeight: 400, mt: 0.5 }}>
           Event Details
         </Typography>

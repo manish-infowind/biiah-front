@@ -1,7 +1,7 @@
 import type { RouteObject } from 'react-router';
 
 import { lazy, Suspense } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { varAlpha } from 'minimal-shared/utils';
 
 import Box from '@mui/material/Box';
@@ -9,6 +9,7 @@ import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgr
 
 import { AuthLayout } from 'src/layouts/auth';
 import { DashboardLayout } from 'src/layouts/dashboard';
+import { BackButton } from 'src/components/back-button';
 
 // ----------------------------------------------------------------------
 
@@ -43,20 +44,56 @@ const renderFallback = () => (
   </Box>
 );
 
+// Map route paths to page names
+const PAGE_NAME_MAP: Record<string, string> = {
+  '/': 'Dashboard',
+  '/members': 'Members',
+  '/calendar': 'Calendar',
+  '/memories': 'Memories',
+  '/attendance': 'Attendance',
+  '/invite-members': 'Invite Members',
+  '/event-details': 'Event Details',
+};
+
+function DashboardLayoutWithPageName({ children }: { children: React.ReactNode }) {
+  const location = useLocation();
+  // Find the best match for the current path
+  const path = Object.keys(PAGE_NAME_MAP).find((key) =>
+    location.pathname === key || location.pathname.startsWith(key + '/')
+  ) || '/';
+  const pageName = PAGE_NAME_MAP[path] || 'Dashboard';
+
+  // Determine if a back button is needed for this route
+  let backButton: React.ReactNode = undefined;
+  if (path === '/attendance') {
+    backButton = <BackButton text="< Back to Members Page" to="/members" sx={{ mb: 0, pl: 0, color: '#d064dd', fontWeight: 500, fontSize: 16 }} />;
+  } else if (path === '/event-details') {
+    backButton = <BackButton text="< Back to Calendar Page" to="/calendar" sx={{ mb: 0, pl: 0, color: '#d064dd', fontWeight: 500, fontSize: 16 }} />;
+  } else if (path === '/invite-members') {
+    backButton = <BackButton text="< Back to Members Page" to="/members" sx={{ mb: 0, pl: 0, color: '#d064dd', fontWeight: 500, fontSize: 16 }} />;
+  }
+
+  return (
+    <DashboardLayout slotProps={{ header: { pageName, backButton } }}>
+      {children}
+    </DashboardLayout>
+  );
+}
+
 export const routesSection: RouteObject[] = [
   {
     element: (
-      <DashboardLayout>
+      <DashboardLayoutWithPageName>
         <Suspense fallback={renderFallback()}>
           <Outlet />
         </Suspense>
-      </DashboardLayout>
+      </DashboardLayoutWithPageName>
     ),
     children: [
       { index: true, element: <DashboardPage /> },
-      { path: 'user', element: <UserPage /> },
-      { path: 'products', element: <ProductsPage /> },
-      { path: 'blog', element: <BlogPage /> },
+      { path: 'members', element: <UserPage /> },
+      { path: 'calendar', element: <ProductsPage /> },
+      { path: 'memories', element: <BlogPage /> },
       { path: 'attendance', element: <AttendancePage /> },
       { path: 'invite-members', element: <InviteMembersPage /> },
       { path: 'event-details', element: <EventDetailsPage /> },

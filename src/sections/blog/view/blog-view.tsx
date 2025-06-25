@@ -56,9 +56,6 @@ export function MemoriesView() {
 
   return (
     <Box sx={{ px: { xs: 2, md: 6 }, py: 4, background: '#FAF7F2', minHeight: '100vh' }}>
-      <Typography variant="h4" sx={{ mb: 4, fontWeight: 500 }}>
-        Memories
-      </Typography>
       <Grid container spacing={4}>
         {cardData.map((card, cardIdx: number) => {
           const imagePairs = getImagePairs(card.images);

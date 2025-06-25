@@ -55,13 +55,6 @@ export default function InviteMembers() {
 
     return (
         <Box sx={{ p: { xs: 2, md: 6 }, minHeight: '100vh', background: '#fff', position: 'relative' }}>
-            <Button
-                startIcon={<ArrowBackIosNewIcon sx={{ fontSize: 18 }} />}
-                sx={{ color: '#e05fd6', mb: 2, textTransform: 'none', fontWeight: 500 }}
-                onClick={() => navigate(-1)}
-            >
-                Back to Members Page
-            </Button>
             <Typography variant="h3" sx={{ fontWeight: 700, mb: 4 }}>
                 Members - Invite
             </Typography>

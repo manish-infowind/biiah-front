@@ -283,9 +283,6 @@ export default function CalendarOverview() {
     <Box sx={{ p: { xs: 1, md: 4 }, bgcolor: '#f8f8f8', minHeight: '100vh' }}>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
         <Box>
-          <Typography variant="h4" fontWeight={600} sx={{ letterSpacing: -1, color: TEXT_COLOR }}>
-            Calendar
-          </Typography>
           <Typography fontSize={18} sx={{ color: '#4B5C6B' }}>Overview</Typography>
         </Box>
         <Button

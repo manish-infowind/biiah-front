@@ -10,6 +10,7 @@ import Grid from '@mui/material/Grid';
 import { DashboardContent } from 'src/layouts/dashboard';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import Link from '@mui/material/Link';
+import { BackButton } from 'src/components/back-button';
 
 const attendanceDates = ['20/05', '27/05', '03/06', '12/06', '20/06', '27/06', '3/07'];
 
@@ -58,26 +59,6 @@ export function AttendanceView() {
         px: { xs: 1, sm: 3, md: 5 },
       }}
     >
-      {/* Top Link */}
-      <Box sx={{ mt: 2, mb: 2 }}>
-        <Link
-          href="/user"
-          underline="hover"
-          sx={{
-            color: '#d064dd',
-            fontWeight: 500,
-            fontSize: 16,
-            mb: 1,
-            display: 'inline-block',
-          }}
-        >
-          {'< Back to Members Page'}
-        </Link>
-        <Typography variant="h4" sx={{ fontWeight: 700, color: '#232b2b', mt: 1 }}>
-          Members - Attendance Register
-        </Typography>
-      </Box>
-
       {/* Attendance Table */}
       <Card
         sx={{

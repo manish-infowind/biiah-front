@@ -95,6 +95,8 @@ export function DashboardLayout({
       <HeaderSection
         disableElevation
         layoutQuery={layoutQuery}
+        logo={slotProps?.header?.logo}
+        pageName={slotProps?.header?.pageName}
         {...slotProps?.header}
         slots={{ ...headerSlots, ...slotProps?.header?.slots }}
         slotProps={merge(headerSlotProps, slotProps?.header?.slotProps ?? {})}
