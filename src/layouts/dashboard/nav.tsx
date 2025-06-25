@@ -9,7 +9,7 @@ import { useTheme } from '@mui/material/styles';
 import ListItemButton from '@mui/material/ListItemButton';
 import Drawer, { drawerClasses } from '@mui/material/Drawer';
 
-import { usePathname } from 'src/routes/hooks';
+import { usePathname, useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
 import { Logo } from 'src/components/logo';
@@ -108,6 +108,7 @@ export function NavMobile({
 
 export function NavContent({ data, slots, workspaces, sx }: NavContentProps) {
   const pathname = usePathname();
+  const router = useRouter();
 
   // Define highlight colors for each nav item by title
   const navActiveColors: Record<string, string> = {
@@ -116,6 +117,7 @@ export function NavContent({ data, slots, workspaces, sx }: NavContentProps) {
     Calendar: '#1DD6DB', // cyan/teal
     Memories: '#FFC36A', // orange/peach
     'Group Details': '#E96CE8', // pink
+    Settings: '#E96CE8', // pink
   };
 
   return (
@@ -224,9 +226,13 @@ export function NavContent({ data, slots, workspaces, sx }: NavContentProps) {
             flexDirection: 'column',
             alignItems: 'center',
             boxShadow: 'none',
+            cursor: 'pointer',
+          }}
+          onClick={() => {
+            // Use router to navigate to /account
+            router.push('/account');
           }}
         >
-          {/* You may want to use your AccountPopover here if needed */}
           <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
             <Box
               component="span"

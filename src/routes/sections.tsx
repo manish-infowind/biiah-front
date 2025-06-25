@@ -23,6 +23,8 @@ export const SignUpView = lazy(()=> import('src/pages/sign-up'))
 export const AttendancePage = lazy(() => import('src/pages/attendance'));
 export const InviteMembersPage = lazy(() => import('src/pages/invite-members'));
 export const EventDetailsPage = lazy(() => import('src/pages/event-details'));
+export const GroupDetailsPage = lazy(() => import('src/pages/group-details'));
+export const AccountPage = lazy(() => import('src/pages/account'));
 
 const renderFallback = () => (
   <Box
@@ -53,7 +55,10 @@ const PAGE_NAME_MAP: Record<string, string> = {
   '/attendance': 'Attendance',
   '/invite-members': 'Invite Members',
   '/event-details': 'Event Details',
-};
+  '/group-details': 'Group Details',
+  '/account': 'Account',
+  '/settings': 'Settings',
+  };
 
 function DashboardLayoutWithPageName({ children }: { children: React.ReactNode }) {
   const location = useLocation();
@@ -97,6 +102,8 @@ export const routesSection: RouteObject[] = [
       { path: 'attendance', element: <AttendancePage /> },
       { path: 'invite-members', element: <InviteMembersPage /> },
       { path: 'event-details', element: <EventDetailsPage /> },
+      { path: 'group-details', element: <GroupDetailsPage /> },
+      { path: 'account', element: <AccountPage /> },
     ],
   },
   {
