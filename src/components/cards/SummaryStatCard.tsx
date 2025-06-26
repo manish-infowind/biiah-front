@@ -42,7 +42,7 @@ export function SummaryStatCard({
         {title}
       </Typography>
 
-      <Box>
+      <Box sx={{   justifyContent: 'space-between', px: 1, background: '#F4F1ED', borderRadius: 2, boxShadow: '5px 5px 10px #0000000F' }}>
         <Typography
           variant="h4"
           component="div"

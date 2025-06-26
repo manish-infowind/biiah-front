@@ -39,10 +39,10 @@ export function GenderStatCard({
         {title}
       </Typography>
 
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', px: 1 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', px: 1, background: '#F4F1ED', borderRadius: 2, boxShadow: '5px 5px 10px #0000000F' }}>
         <Box textAlign="center">
           <Typography
-            variant="h5"
+            variant="h4"
             sx={{ fontWeight: 600, color }}
           >
             {men}
@@ -54,7 +54,7 @@ export function GenderStatCard({
 
         <Box textAlign="center">
           <Typography
-            variant="h5"
+            variant="h4"
             sx={{ fontWeight: 600, color }}
           >
             {women}

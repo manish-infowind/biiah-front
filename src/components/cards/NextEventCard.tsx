@@ -32,9 +32,7 @@ export function NextEventCard({
 }: NextEventCardProps) {
   return (
     <Box>
-      <Typography variant="h6" sx={{ fontWeight: 700, color: 'text.primary', mb: 1 }}>
-        Next Event
-      </Typography>
+
       <Card
         sx={{
           p: 3,
@@ -45,6 +43,9 @@ export function NextEventCard({
           ...sx,
         }}
       >
+              <Typography variant="h6" sx={{ fontWeight: 700, color: 'text.primary', mb: 1 }}>
+        Next Event
+      </Typography>
         <Typography variant="h6" sx={{ color: '#00CFE8', fontWeight: 700, mb: 2 }}>
           {eventName}
         </Typography>

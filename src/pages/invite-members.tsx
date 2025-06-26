@@ -55,9 +55,6 @@ export default function InviteMembers() {
 
     return (
         <Box sx={{ p: { xs: 2, md: 6 }, minHeight: '100vh', background: '#fff', position: 'relative' }}>
-            <Typography variant="h3" sx={{ fontWeight: 700, mb: 4 }}>
-                Members - Invite
-            </Typography>
             <Card sx={{
                 p: { xs: 4, md: 2 },
                 mb: 2,
