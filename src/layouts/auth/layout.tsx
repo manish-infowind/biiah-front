@@ -4,8 +4,6 @@ import { merge } from 'es-toolkit';
 
 import Alert from '@mui/material/Alert';
 
-
-
 import { AuthContent } from './content';
 import { MainSection } from '../core/main-section';
 import { LayoutSection } from '../core/layout-section';
@@ -75,7 +73,7 @@ export function AuthLayout({
           p: theme.spacing(3, 2, 10, 2),
           [theme.breakpoints.up(layoutQuery)]: {
             justifyContent: 'center',
-            p: theme.spacing(10, 0, 10, 0),
+            p: theme.spacing(6, 0, 6, 0),
           },
         }),
         ...(Array.isArray(slotProps?.main?.sx)
@@ -89,18 +87,7 @@ export function AuthLayout({
 
   return (
     <LayoutSection
-      /** **************************************
-       * @Header
-       *************************************** */
-      headerSection={renderHeader()}
-      /** **************************************
-       * @Footer
-       *************************************** */
-      footerSection={renderFooter()}
-      /** **************************************
-       * @Styles
-       *************************************** */
-      cssVars={{ '--layout-auth-content-width': '420px', ...cssVars }}
+      cssVars={{ '--layout-auth-content-width': '660px', ...cssVars }}
       sx={[
         (theme) => ({
           position: 'relative',

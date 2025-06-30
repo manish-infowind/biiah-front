@@ -1,422 +1,220 @@
-// import { useState, useCallback } from 'react';
-
-// import Box from '@mui/material/Box';
-// import Link from '@mui/material/Link';
-// import Button from '@mui/material/Button';
-// import TextField from '@mui/material/TextField';
-// import IconButton from '@mui/material/IconButton';
-// import Typography from '@mui/material/Typography';
-// import InputAdornment from '@mui/material/InputAdornment';
-
-// import { useRouter } from 'src/routes/hooks';
-// //import { Iconify } from 'src/components/iconify';
-
-// // ----------------------------------------------------------------------
-
-// export function SignUpView() {
-//     const router = useRouter();
-//     const [showPassword, setShowPassword] = useState(false);
-
-//     const handleSignIn = useCallback(() => {
-//         router.push('/');
-//     }, [router]);
-
-//  const renderForm = (
-//   <Box
-//     sx={{
-//       display: 'flex',
-//       alignItems: 'center',
-//       flexDirection: 'column',
-//     }}
-//   >
-//     {/* Enter Code - medium width */}
-//     <TextField
-//       name="code"
-//       placeholder="Enter your code"
-//       sx={{
-//         mb: 3,
-//         width: '294px',
-//         '& .MuiOutlinedInput-root': {
-//           '& fieldset': { borderColor: 'black' },
-//           '&:hover fieldset': { borderColor: 'black' },
-//           '&.Mui-focused fieldset': { borderColor: 'black' },
-//         },
-//       }}
-//       InputProps={{
-//         sx: {
-//           borderRadius: 99,
-//           height: '63px', // 👈 Set fixed height
-//         },
-//       }}
-//     />
-
-//     {/* First / Last Name */}
-//     <Box sx={{ display: 'flex', gap: 2, width: '659px', mb: 3 }}>
-//       <TextField
-//         name="first_name"
-//         placeholder="First/Preferred Name"
-//         fullWidth
-//         sx={{
-//           '& .MuiOutlinedInput-root': {
-//             '& fieldset': { borderColor: 'black' },
-//             '&:hover fieldset': { borderColor: 'black' },
-//             '&.Mui-focused fieldset': { borderColor: 'black' },
-//           },
-//         }}
-//         InputProps={{
-//           sx: {
-//             borderRadius: 99,
-//             height: '63px',
-//           },
-//         }}
-//       />
-//       <TextField
-//         name="last_name"
-//         placeholder="Last Name"
-//         fullWidth
-//         sx={{
-//           '& .MuiOutlinedInput-root': {
-//             '& fieldset': { borderColor: 'black' },
-//             '&:hover fieldset': { borderColor: 'black' },
-//             '&.Mui-focused fieldset': { borderColor: 'black' },
-//           },
-//         }}
-//         InputProps={{
-//           sx: {
-//             borderRadius: 99,
-//             height: '63px',
-//           },
-//         }}
-//       />
-//     </Box>
-
-//     {/* Email */}
-//     <TextField
-//       name="email"
-//       placeholder="Email"
-//       sx={{
-//         mb: 3,
-//         width: '402px',
-//         '& .MuiOutlinedInput-root': {
-//           '& fieldset': { borderColor: 'black' },
-//           '&:hover fieldset': { borderColor: 'black' },
-//           '&.Mui-focused fieldset': { borderColor: 'black' },
-//         },
-//       }}
-//       InputProps={{
-//         sx: {
-//           borderRadius: 99,
-//           height: '63px',
-//         },
-//       }}
-//     />
-
-//     {/* Password */}
-//     <TextField
-//       name="create_password"
-//       type="password"
-//       placeholder="Create Password"
-//       sx={{
-//         mb: 3,
-//         width: '342px',
-//         '& .MuiOutlinedInput-root': {
-//           '& fieldset': { borderColor: 'black' },
-//           '&:hover fieldset': { borderColor: 'black' },
-//           '&.Mui-focused fieldset': { borderColor: 'black' },
-//         },
-//       }}
-//       InputProps={{
-//         sx: {
-//           borderRadius: 99,
-//           height: '63px',
-//         },
-//       }}
-//     />
-
-//     {/* Button - smaller */}
-//     <Button
-//       size="large"
-//       type="submit"
-//       color="inherit"
-//       variant="contained"
-//       onClick={handleSignIn}
-//       sx={{
-//         width: '262px',
-//         height:'63px',
-//         borderRadius: 99,
-//         mb: 2,
-//         textTransform: 'none',
-//         alignSelf: 'center',
-//       }}
-//     >
-//       Let&apos;s go!
-//     </Button>
-// {/* Don't have a code & Register interest - separate line */}
-// <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center', mt: 1 }}>
-//   <Typography variant="body2" sx={{ color: 'black' }}>
-//     Don&apos;t have a code?
-//   </Typography>
-//   <Typography variant="body2" sx={{ color: 'black' }}>
-//     Register your interest{' '}
-//     <Link
-//       href="#"
-//       sx={{
-//         color: '#d064dd',
-//         textDecoration: 'none',
-//         fontWeight: 500,
-//         '&:hover': {
-//           textDecoration: 'underline',
-//         },
-//       }}
-//     >
-//       here
-//     </Link>
-
-//   </Typography>
-// </Box>
-
-//   </Box>
-// );
-
-
-
-//     return (
-//         <>
-//             <Box
-//                 sx={{
-//                     gap: 1.5,
-//                     display: 'flex',
-//                     flexDirection: 'column',
-//                     alignItems: 'center',
-//                     mb: 5,
-//                     color: '#d064dd',
-//                 }}
-//             >
-//                 <Typography variant="h5">Welcome!</Typography>
-//             </Box>
-//             {renderForm}
-//         </>
-//     );
-// }
-
 import { useState, useCallback } from 'react';
+import { Box, Button, colors, TextField, Typography, useTheme } from '@mui/material';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import { Link } from 'react-router-dom';
 
-import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
 
 import { useRouter } from 'src/routes/hooks';
+import { themeConfig } from 'src/theme';
 
 // ----------------------------------------------------------------------
 
+
+const validationSchema = yup.object({
+    code: yup
+        .string()
+        .required('Code is required'),
+    first_name: yup
+        .string()
+        .required('First name is required'),
+    last_name: yup
+        .string()
+        .required('Last name is required'),
+    email: yup
+        .string()
+        .email('Enter a valid email')
+        .required('Email is required'),
+    create_password: yup
+        .string()
+        .min(8, 'Password should be of minimum 8 characters length')
+        .required('Password is required'),
+});
+
 export function SignUpView() {
     const router = useRouter();
+    const theme = useTheme();
     const [showPassword, setShowPassword] = useState(false);
+
+    const styleTextField = {
+        '& .MuiInputBase-root': {
+            boxShadow: '7px 7px 10px #0000000F',
+            borderRadius: 50,
+            height: 63,
+            '& input': {
+                padding: '0 25px'
+            },
+            '& fieldset': { borderColor: `${theme.palette.grey[900]}` },
+            '&:hover fieldset': { borderColor: `${theme.palette.grey[900]}` },
+            '&.Mui-focused fieldset': { borderColor: `${theme.palette.grey[900]}` },
+        }
+    };
+
+    const formik = useFormik({
+        initialValues: {
+            code: '',
+            first_name: '',
+            last_name: '',
+            email: '',
+            create_password: '',
+        },
+        validationSchema,
+        onSubmit: (values) => {
+            // For now, just log the values
+            console.log('Form values:', values);
+            // You can add your sign-up logic here
+        },
+    });
 
     const handleSignIn = useCallback(() => {
         router.push('/');
     }, [router]);
 
-    const renderForm = (
-        <Box
-            sx={{
-                display: 'flex',
-                alignItems: 'center',
-                flexDirection: 'column',
-            }}
-        >
-            {/* Enter Code */}
-            <TextField
-                name="code"
-                placeholder="Enter your code"
-                sx={{
-                    mb: 3,
-                    width: '294px',
-                    '& .MuiOutlinedInput-root': {
-                        '& fieldset': { borderColor: 'black' },
-                        '&:hover fieldset': { borderColor: 'black' },
-                        '&.Mui-focused fieldset': { borderColor: 'black' },
-                    },
-                }}
-                InputProps={{
-                    sx: {
-                        borderRadius: 99,
-                        height: '63px',
-                    },
-                }}
-            />
-
-            {/* First / Last Name */}
-            <Box sx={{ display: 'flex', gap: 2, width: '659px', mb: 3 }}>
-                <TextField
-                    name="first_name"
-                    placeholder="First/Preferred Name"
-                    fullWidth
-                    sx={{
-                        '& .MuiOutlinedInput-root': {
-                            '& fieldset': { borderColor: 'black' },
-                            '&:hover fieldset': { borderColor: 'black' },
-                            '&.Mui-focused fieldset': { borderColor: 'black' },
-                        },
-                    }}
-                    InputProps={{
-                        sx: {
-                            borderRadius: 99,
-                            height: '63px',
-                        },
-                    }}
-                />
-                <TextField
-                    name="last_name"
-                    placeholder="Last Name"
-                    fullWidth
-                    sx={{
-                        '& .MuiOutlinedInput-root': {
-                            '& fieldset': { borderColor: 'black' },
-                            '&:hover fieldset': { borderColor: 'black' },
-                            '&.Mui-focused fieldset': { borderColor: 'black' },
-                        },
-                    }}
-                    InputProps={{
-                        sx: {
-                            borderRadius: 99,
-                            height: '63px',
-                        },
-                    }}
-                />
-            </Box>
-
-            {/* Email */}
-            <TextField
-                name="email"
-                placeholder="Email"
-                sx={{
-                    mb: 3,
-                    width: '402px',
-                    '& .MuiOutlinedInput-root': {
-                        '& fieldset': { borderColor: 'black' },
-                        '&:hover fieldset': { borderColor: 'black' },
-                        '&.Mui-focused fieldset': { borderColor: 'black' },
-                    },
-                }}
-                InputProps={{
-                    sx: {
-                        borderRadius: 99,
-                        height: '63px',
-                    },
-                }}
-            />
-
-            {/* Password */}
-            <TextField
-                name="create_password"
-                type="password"
-                placeholder="Create Password"
-                sx={{
-                    mb: 3,
-                    width: '342px',
-                    '& .MuiOutlinedInput-root': {
-                        '& fieldset': { borderColor: 'black' },
-                        '&:hover fieldset': { borderColor: 'black' },
-                        '&.Mui-focused fieldset': { borderColor: 'black' },
-                    },
-                }}
-                InputProps={{
-                    sx: {
-                        borderRadius: 99,
-                        height: '63px',
-                    },
-                }}
-            />
-
-            {/* Let’s go! Button */}
-            <Button
-                size="large"
-                type="submit"
-                color="inherit"
-                variant="contained"
-                onClick={handleSignIn}
-                sx={{
-                    width: '262px',
-                    height: '63px',
-                    borderRadius: 99,
-                    mb: 2,
-                    textTransform: 'none',
-                    alignSelf: 'center',
-                }}
-            >
-                Let&apos;s go!
-            </Button>
-
-            {/* Don't have code / Register interest / Login */}
-            <Box
-                sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    mt: 12,
-                }}
-            >
-                <Typography variant="body2" sx={{ color: 'black' }}>
-                    Don&apos;t have a code?
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'black' }}>
-                    Register your interest{' '}
-                    <Link
-                        href="#"
-                        sx={{
-                            color: '#d064dd',
-                            textDecoration: 'none',
-                            fontWeight: 500,
-                            '&:hover': {
-                                textDecoration: 'underline',
-                            },
-                        }}
-                    >
-                        here
-                    </Link>
-                </Typography>
-
-                {/* Login Button */}
-                <Button
-                    size="large"
-                    variant="outlined"
-                    onClick={() => router.push('/login')}
-                    sx={{
-                        mt: 2,
-                        width: '107px',
-                        height: '39px',
-                        borderRadius: 99,
-                        textTransform: 'none',
-                        color: '#F4F1ED',
-                        background: "#00B6BC"
-
-                    }}
-                >
-                    Login
-                </Button>
-            </Box>
-        </Box>
-    );
 
     return (
-        <>
+        <Box>
             <Box
                 sx={{
-                    gap: 1.5,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    mb: 5,
-                    color: '#d064dd',
+                    mb: 7,
+                    color: theme.palette.primary.main,
+                    textAlign: 'center'
                 }}
             >
-                <Typography variant="h5">Welcome!</Typography>
+                <Typography sx={{ fontWeight: '400' }} variant="h3">Welcome!</Typography>
             </Box>
-            {renderForm}
-        </>
+            <Box
+                component="form"
+                onSubmit={formik.handleSubmit}
+                sx={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    alignItems: 'start',
+                    justifyContent: 'center',
+                    flexDirection: 'row',
+                    gap: 2
+                }}
+                noValidate
+                autoComplete="off"
+            >
+                {/* Enter Code */}
+                <Box sx={{ width: '100%', maxWidth: '320px' }}>
+                    <TextField
+                        name="code"
+                        placeholder="Enter your code"
+                        fullWidth
+                        value={formik.values.code}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        error={formik.touched.code && Boolean(formik.errors.code)}
+                        helperText={formik.touched.code && formik.errors.code}
+                        sx={styleTextField}
+                    />
+                </Box>
+
+                {/* First / Last Name */}
+                <Box sx={{ width: '100%', maxWidth: '297px' }}>
+                    <TextField
+                        name="first_name"
+                        placeholder="First/Preferred Name"
+                        fullWidth
+                        value={formik.values.first_name}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        error={formik.touched.first_name && Boolean(formik.errors.first_name)}
+                        helperText={formik.touched.first_name && formik.errors.first_name}
+                        sx={styleTextField}
+                    />
+                </Box>
+                <Box sx={{ width: '100%', maxWidth: '297px' }}>
+                    <TextField
+                        name="last_name"
+                        placeholder="Last Name"
+                        fullWidth
+                        value={formik.values.last_name}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        error={formik.touched.last_name && Boolean(formik.errors.last_name)}
+                        helperText={formik.touched.last_name && formik.errors.last_name}
+                        sx={styleTextField}
+                    />
+                </Box>
+
+                {/* Email */}
+                <Box sx={{ width: '100%', maxWidth: '400px' }}>
+                    <TextField
+                        name="email"
+                        placeholder="Email"
+                        fullWidth
+                        value={formik.values.email}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        error={formik.touched.email && Boolean(formik.errors.email)}
+                        helperText={formik.touched.email && formik.errors.email}
+                        sx={styleTextField}
+                    />
+                </Box>
+
+                {/* Password */}
+                <Box sx={{ width: '100%', maxWidth: '350px' }}>
+                    <TextField
+                        name="create_password"
+                        type={showPassword ? 'text' : 'password'}
+                        placeholder="Create Password"
+                        fullWidth
+                        value={formik.values.create_password}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        error={formik.touched.create_password && Boolean(formik.errors.create_password)}
+                        helperText={formik.touched.create_password && formik.errors.create_password}
+                        sx={styleTextField}
+                    />
+                </Box>
+
+                {/* Let's go! Button */}
+                <Box sx={{ width: '100%', mt: 5, textAlign: 'center' }}>
+                    <Button
+                        size="large"
+                        type="submit"
+                        color="inherit"
+                        variant="contained"
+                        fullWidth
+                        sx={{ maxWidth: '262px', height: 63, borderRadius: 50, fontSize: 25, fontWeight: '400' }}
+                    >
+                        Let&apos;s go!
+                    </Button>
+                </Box>
+
+                {/* Don't have code / Register interest / Login */}
+                <Box sx={{ textAlign: 'center', mt: 11 }}>
+                    <Typography variant="body1" sx={{ fontSize: 18 }}>
+                        Don&apos;t have a code?
+                    </Typography>
+                    <Typography variant="body1" sx={{ fontSize: 18 }}>
+                        Register your interest{' '}
+                        <Link to="/" style={{ color: theme.palette.primary.main, textDecoration: 'underline' }}>here</Link>
+                    </Typography>
+
+                    {/* Login Button */}
+                    <Button
+                        component={Link}
+                        size="large"
+                        variant="contained"
+                        to="/sign-in"
+                        color='secondary'
+                        sx={{
+                            boxShadow: '0px 3px 6px #00000029',
+                            borderRadius: 50,
+                            px: 4,
+                            py: 1.2,
+                            lineHeight: 'normal',
+                            minHeight: 'auto',
+                            mt: 2
+                        }}
+                    >
+                        Login
+                    </Button>
+                </Box>
+            </Box>
+        </Box>
     );
 }

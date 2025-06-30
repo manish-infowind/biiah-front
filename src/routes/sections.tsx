@@ -19,7 +19,7 @@ export const UserPage = lazy(() => import('src/pages/user'));
 export const SignInPage = lazy(() => import('src/pages/sign-in'));
 export const ProductsPage = lazy(() => import('src/pages/calendar'));
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
-export const SignUpView = lazy(()=> import('src/pages/sign-up'))
+export const SignUpView = lazy(() => import('src/pages/sign-up'))
 export const AttendancePage = lazy(() => import('src/pages/attendance'));
 export const InviteMembersPage = lazy(() => import('src/pages/invite-members'));
 export const EventDetailsPage = lazy(() => import('src/pages/event-details'));
@@ -58,7 +58,7 @@ const PAGE_NAME_MAP: Record<string, string> = {
   '/group-details': 'Group Details',
   '/account': 'Account',
   '/settings': 'Settings',
-  };
+};
 
 function DashboardLayoutWithPageName({ children }: { children: React.ReactNode }) {
   const location = useLocation();
@@ -87,24 +87,21 @@ function DashboardLayoutWithPageName({ children }: { children: React.ReactNode }
 
 export const routesSection: RouteObject[] = [
   {
+    path: '/',
     element: (
-      <DashboardLayoutWithPageName>
-        <Suspense fallback={renderFallback()}>
-          <Outlet />
-        </Suspense>
-      </DashboardLayoutWithPageName>
+      <AuthLayout
+        slotProps={{
+          content: {
+            sx: {
+              backgroundColor: 'transparent'
+            },
+          },
+        }}
+      >
+        <SignUpView />
+      </AuthLayout>
+
     ),
-    children: [
-      { index: true, element: <DashboardPage /> },
-      { path: 'members', element: <UserPage /> },
-      { path: 'calendar', element: <ProductsPage /> },
-      { path: 'memories', element: <BlogPage /> },
-      { path: 'attendance', element: <AttendancePage /> },
-      { path: 'invite-members', element: <InviteMembersPage /> },
-      { path: 'event-details', element: <EventDetailsPage /> },
-      { path: 'group-details', element: <GroupDetailsPage /> },
-      { path: 'account', element: <AccountPage /> },
-    ],
   },
   {
     path: 'sign-in',
@@ -123,26 +120,26 @@ export const routesSection: RouteObject[] = [
 
     ),
   },
-   {
-    path: 'sign-up',
-    element: (
-      <AuthLayout
-        slotProps={{
-          content: {
-            sx: {
-              backgroundColor: 'transparent'
-            },
-          },
-        }}
-      >
-        <SignUpView />
-      </AuthLayout>
-
-    ),
-  },
   {
-    path: '404',
-    element: <Page404 />,
+    path: '/',
+    element: (
+      <DashboardLayoutWithPageName>
+        <Suspense fallback={renderFallback()}>
+          <Outlet />
+        </Suspense>
+      </DashboardLayoutWithPageName>
+    ),
+    children: [
+      { path: 'dashboard', element: <DashboardPage /> },
+      { path: 'members', element: <UserPage /> },
+      { path: 'calendar', element: <ProductsPage /> },
+      { path: 'memories', element: <BlogPage /> },
+      { path: 'attendance', element: <AttendancePage /> },
+      { path: 'invite-members', element: <InviteMembersPage /> },
+      { path: 'event-details', element: <EventDetailsPage /> },
+      { path: 'group-details', element: <GroupDetailsPage /> },
+      { path: 'account', element: <AccountPage /> },
+    ],
   },
   { path: '*', element: <Page404 /> },
 ];

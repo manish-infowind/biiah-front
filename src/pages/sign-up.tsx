@@ -8,7 +8,6 @@ export default function Page() {
   return (
     <>
       <title>{`Sign Up - ${CONFIG.appName}`}</title>
-
       <SignUpView />
     </>
   );

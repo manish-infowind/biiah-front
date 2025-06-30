@@ -90,7 +90,7 @@ export const grey = createPaletteChannel(themeConfig.palette.grey);
 // Text color
 export const text = {
   light: createPaletteChannel({
-    primary: grey[800],
+    primary: grey[900],
     secondary: grey[600],
     disabled: grey[500],
   }),

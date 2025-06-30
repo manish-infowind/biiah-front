@@ -20,7 +20,7 @@ export const LabelRoot = styled('span', {
         color: theme.vars.palette.common.white,
         backgroundColor: theme.vars.palette.text.primary,
         ...theme.applyStyles('dark', {
-          color: theme.vars.palette.grey[800],
+          color: theme.vars.palette.grey[900],
         }),
       }),
       /**
@@ -42,7 +42,7 @@ export const LabelRoot = styled('span', {
        * @variant inverted
        */
       ...(variant === 'inverted' && {
-        color: theme.vars.palette.grey[800],
+        color: theme.vars.palette.grey[900],
         backgroundColor: theme.vars.palette.grey[300],
       }),
     }),

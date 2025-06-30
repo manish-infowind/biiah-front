@@ -25,7 +25,7 @@ export const themeConfig: ThemeConfig = {
   /** **************************************
    * Base
    *************************************** */
-  classesPrefix: 'minimal',
+  classesPrefix: 'biiah',
   /** **************************************
    * Typography
    *************************************** */
@@ -38,19 +38,19 @@ export const themeConfig: ThemeConfig = {
    *************************************** */
   palette: {
     primary: {
-      lighter: '#D0ECFE',
-      light: '#73BAFB',
-      main: '#1877F2',
-      dark: '#0C44AE',
-      darker: '#042174',
+      lighter: '#F3D8FB',
+      light: '#D48FE7',
+      main: '#D064DD',       // your brand purple
+      dark: '#A64DBA',
+      darker: '#713A7C',
       contrastText: '#FFFFFF',
     },
     secondary: {
-      lighter: '#EFD6FF',
-      light: '#C684FF',
-      main: '#8E33FF',
-      dark: '#5119B7',
-      darker: '#27097A',
+      lighter: '#A0F0F0',
+      light: '#5DDCDC',
+      main: '#00B6BC',       // your brand teal
+      dark: '#008F92',
+      darker: '#005A5C',
       contrastText: '#FFFFFF',
     },
     info: {
@@ -62,19 +62,19 @@ export const themeConfig: ThemeConfig = {
       contrastText: '#FFFFFF',
     },
     success: {
-      lighter: '#D3FCD2',
-      light: '#77ED8B',
-      main: '#22C55E',
-      dark: '#118D57',
-      darker: '#065E49',
-      contrastText: '#ffffff',
+      lighter: '#BDF5E2',
+      light: '#65E8B5',
+      main: '#00C08B',       // your greenish teal
+      dark: '#02956E',
+      darker: '#02614D',
+      contrastText: '#FFFFFF',
     },
     warning: {
-      lighter: '#FFF5CC',
-      light: '#FFD666',
-      main: '#FFAB00',
-      dark: '#B76E00',
-      darker: '#7A4100',
+      lighter: '#FFE3B3',
+      light: '#FFC266',
+      main: '#FF9500',       // your bright orange
+      dark: '#CC7700',
+      darker: '#9B5800',
       contrastText: '#1C252E',
     },
     error: {
@@ -86,16 +86,16 @@ export const themeConfig: ThemeConfig = {
       contrastText: '#FFFFFF',
     },
     grey: {
-      '50': '#FCFDFD',
-      '100': '#F9FAFB',
-      '200': '#F4F6F8',
-      '300': '#DFE3E8',
-      '400': '#C4CDD5',
-      '500': '#919EAB',
-      '600': '#637381',
-      '700': '#454F5B',
-      '800': '#1C252E',
-      '900': '#141A21',
+      50: '#FCFDFD',
+      100: '#F9FAFB',
+      200: '#F4F1ED',
+      300: '#E3E1DD',
+      400: '#C4CDD5',
+      500: '#919EAB',
+      600: '#637381',
+      700: '#454F5B',
+      800: '#1C252E',
+      900: '#071A24',
     },
     common: { black: '#000000', white: '#FFFFFF' },
   },
